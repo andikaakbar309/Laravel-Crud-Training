@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\BasicController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,3 +35,7 @@ Route::get('/blank', function () {
 Route::middleware('auth')->group(function() {
     Route::resource('basic', BasicController::class);
 });
+
+Route::post('basic/export-pdf', [BasicController::class, 'exportPDF'])->name('export-pdf');
+
+Route::post('basic/export-excel', [BasicController::class, 'exportExcel'])->name('export-excel');

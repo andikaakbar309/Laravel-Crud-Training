@@ -8,45 +8,25 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('basic.store') }}" method="post">
+        <form method="POST" action="{{ route('basic.store') }}">
                 @csrf
-
-                <div class="form-group">
-                  <label for="name">Name</label>
-                  <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" placeholder="First name" autocomplete="off" value="{{ old('name') }}">
-                  @error('name')
-                    <span class="text-danger">{{ $message }}</span>
-                  @enderror
-                </div>
-
-                <div class="form-group">
-                  <label for="last_name">Last Name</label>
-                  <input type="text" class="form-control @error('last_name') is-invalid @enderror" name="last_name" id="last_name" placeholder="Last name" autocomplete="off" value="{{ old('last_name') }}">
-                  @error('last_name')
-                    <span class="text-danger">{{ $message }}</span>
-                  @enderror
-                </div>
-
-                <div class="form-group">
-                  <label for="email">Email</label>
-                  <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" placeholder="Email" autocomplete="off" value="{{ old('email') }}">
-                  @error('email')
-                    <span class="text-danger">{{ $message }}</span>
-                  @enderror
-                </div>
-
-                <div class="form-group">
-                  <label for="password">Password</label>
-                  <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" id="password" placeholder="Password" autocomplete="off">
-                  @error('password')
-                    <span class="text-danger">{{ $message }}</span>
-                  @enderror
-                </div>
-
-                <button type="submit" class="btn btn-primary">Save</button>
-                <a href="{{ route('basic.index') }}" class="btn btn-default">Back to list</a>
-
-            </form>
+                    <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Masukan Nama">
+                          </div>
+                          <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                          <textarea class="form-control" name="description" placeholder="Deskripsi"></textarea>
+                              </div>
+                              <div class="mb-3">
+                                <label for="seq" class="form-label">SEQ</label>
+                              <input type="text" class="form-control" name="seq" id="seq" placeholder="Sequence">
+                              </div>
+                              <div class="mb-3">
+                                    <a href="/categories" class="btn btn-secondary btn-sm">Back</a>
+                                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                              </div>
+                  </form>
         </div>
     </div>
 

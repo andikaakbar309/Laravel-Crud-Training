@@ -8,6 +8,10 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Category;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\CategoryExport;
+use PDF;
 
 class BasicController extends Controller
 {
@@ -18,10 +22,22 @@ class BasicController extends Controller
      */
     public function index()
     {
-        return view('basic.list', [
-            'title' => 'Basic CRUD',
-            'users' => User::paginate(10)
-        ]);
+        $data = Category::orderBy('seq', 'asc')->paginate(7);
+
+        return view('basic.index')->with('data', $data);
+    }
+
+    public function exportPDF()
+    {
+        $data = Category::all();
+
+        $pdf = PDF::loadView('pdf.pdf', array('data' => $data))->setPaper('a4', 'potrait');
+        return $pdf->download();
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new CategoryExport, 'category.xlsx');
     }
 
     /**
@@ -31,10 +47,7 @@ class BasicController extends Controller
      */
     public function create()
     {
-        return view('basic.create', [
-            'title' => 'New User',
-            'users' => User::paginate(10)
-        ]);
+        return view('basic.create');
     }
 
     /**
@@ -43,16 +56,20 @@ class BasicController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(AddUserRequest $request)
+    public function store(Request $request)
     {
-        User::create([
-            'name' => $request->name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password)
+        $request->validate([
+            'name'=>'required',
+            'description'=>'nullable',
+            'seq'=>'required',
         ]);
-
-        return redirect()->route('basic.index')->with('message', 'User added successfully!');
+        $data = [
+            'name'=>$request->input('name'),
+            'description'=>$request->input('description'),
+            'seq'=>$request->input('seq'),
+        ];
+        Category::create($data);
+        return redirect('basic')->with('message', 'Add Data Successfully');
     }
 
     /**
@@ -72,12 +89,11 @@ class BasicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $basic)
+    public function edit($id)
     {
-        return view('basic.edit', [
-            'title' => 'Edit User',
-            'user' => $basic
-        ]);
+        $data = Category::where('id', $id)->first();
+        
+        return view('/basic/edit')->with('data', $data);
     }
 
     /**
@@ -87,17 +103,31 @@ class BasicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(EditUserRequest $request, User $basic)
+    public function update(Request $request, $id)
     {
-        if($request->filled('password')) {
-            $basic->password = Hash::make($request->password);
-        }
-        $basic->name = $request->name;
-        $basic->last_name = $request->last_name;
-        $basic->email = $request->email;
-        $basic->save();
+        $data = Category::findOrFail($id);
 
-        return redirect()->route('basic.index')->with('message', 'User updated successfully!');
+        $validasi = $request->validate([
+             'name'=>'required',
+             'description'=>'nullable',
+             'seq'=>'required',
+             'status'=>$data->status === 'inactive' ? 'required|in:Active,Inactive' : 'in:Active,Inactive'
+         ]);
+ 
+             if($data->status === 'Inactive' && $validasi['status'] === 'Active') {
+                 $data->status = 'Active';
+                 $data->is_deleted = false;
+             }
+ 
+             $data->save();
+ 
+         $data = [
+             'name'=>$request->input('name'),
+             'description'=>$request->input('description'),
+             'seq'=>$request->input('seq')
+         ];
+         Category::where('id', $id)->update($data);
+         return redirect('/basic')->with('message', 'Succes edit data');
     }
 
     /**
@@ -106,14 +136,15 @@ class BasicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $basic)
+    public function destroy($id)
     {
-        if (Auth::id() == $basic->getKey()) {
-            return redirect()->route('basic.index')->with('warning', 'Can not delete yourself!');
+        $data = Category::findOrFail($id);
+
+        if ($data->status === 'Active') {
+            $data->status = 'Inactive';
+            $data->is_deleted = true;
+            $data->save();
+            return redirect('/basic')->with('success', 'Data is inactive');
         }
-
-        $basic->delete();
-
-        return redirect()->route('basic.index')->with('message', 'User deleted successfully!');
     }
 }

@@ -18,6 +18,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
     <!-- Favicon -->
     <link href="{{ asset('img/favicon.png') }}" rel="icon" type="image/png">
@@ -36,7 +37,7 @@
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
-            <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+            <div class="sidebar-brand-text mx-3">Annka Admin<sup>2</sup></div>
         </a>
 
         <!-- Divider -->
@@ -61,7 +62,7 @@
         <li class="nav-item {{ Nav::isRoute('basic.index') }}">
             <a class="nav-link" href="{{ route('basic.index') }}">
                 <i class="fas fa-fw fa-plus"></i>
-                <span>{{ __('Basic CRUD') }}</span>
+                <span>{{ __('CRUD') }}</span>
             </a>
         </li>
 

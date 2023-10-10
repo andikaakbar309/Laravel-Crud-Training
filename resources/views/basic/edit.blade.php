@@ -8,46 +8,39 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('basic.update', $user->id) }}" method="post">
+            <form method="POST" action="{{ route('basic.update' , $data->id) }}">
                 @csrf
-                @method('put')
-
-                <div class="form-group">
-                  <label for="name">Name</label>
-                  <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" placeholder="First name" autocomplete="off" value="{{ old('name') ?? $user->name }}">
-                  @error('name')
-                    <span class="text-danger">{{ $message }}</span>
-                  @enderror
-                </div>
-
-                <div class="form-group">
-                  <label for="last_name">Last Name</label>
-                  <input type="text" class="form-control @error('last_name') is-invalid @enderror" name="last_name" id="last_name" placeholder="Last name" autocomplete="off" value="{{ old('last_name') ?? $user->last_name }}">
-                  @error('last_name')
-                    <span class="text-danger">{{ $message }}</span>
-                  @enderror
-                </div>
-
-                <div class="form-group">
-                  <label for="email">Email</label>
-                  <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" placeholder="Email" autocomplete="off" value="{{ old('email') ?? $user->email }}">
-                  @error('email')
-                    <span class="text-danger">{{ $message }}</span>
-                  @enderror
-                </div>
-
-                <div class="form-group">
-                  <label for="password">Password</label>
-                  <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" id="password" placeholder="Password" autocomplete="off">
-                  @error('password')
-                    <span class="text-danger">{{ $message }}</span>
-                  @enderror
-                </div>
-
-                <button type="submit" class="btn btn-primary">Save</button>
-                <a href="{{ route('basic.index') }}" class="btn btn-default">Back to list</a>
-
-            </form>
+                @method('PUT')
+                    <div class="mb-3">
+                    <h3>ID :{{ $data->id }}</h3>
+                    </div>
+                    <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" name="name" id="name" value="{{ $data->name }}">
+                          </div>
+                          <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                          <textarea class="form-control" name="description">{{ $data->description }}</textarea>
+                              </div>
+                              <div class="mb-3">
+                                    <label for="seq">Seq</label>
+                              <input type="text" class="form-control" name="seq" id="seq" value="{{ $data->seq }}">
+                              </div>
+                              <div class="mb-3">
+                                          @if ($data->status === 'Inactive')
+                                                <label for="status">Status</label>
+                                                <select name="status" id="status">
+                                                       <option value="Active" {{ $data->status === 'Active' ? 'selected' : '' }}>Active</option>      
+                                                </select>  
+                                                @else
+                                          <label for="status" class="badge rounded-pill {{ $data->status === 'Active' ? 'bg-primary' : 'bg-danger' }}">Active</label>                                
+                                          @endif
+                                    </div>
+                              <div class="mb-3">
+                                    <a href="/basic" class="btn btn-secondary btn-sm">Back</a>
+                                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                              </div>
+                  </form>
         </div>
     </div>
 
