@@ -22,25 +22,24 @@
         </div>
     @endif
 
-    <table class="table table-bordered table-stripped mb-3">
+    <table style="text-align:center;" class="table table-bordered table-stripped mb-3">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>Seq</th>
                 <th>Name</th>
                 <th>Description</th>
-                <th>Seq</th>
                 <th>Created At</th>
                 <th>Updated At</th>
                 <th>Status</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($data as $item)
                 <tr>
-                <td>{{ $item->id }}</td>
+                <td>{{ $item->seq }}</td>
                 <td>{{ $item->name }}</td>
                 <td>{{ $item->description }}</td>
-                <td>{{ $item->seq }}</td>
                 <td>{{ $item->created_at }}</td>
                 <td>{{ $item->updated_at }}</td>
                 <td><span class="badge rounded-pill {{ $item->status == 'Active' ? 'bg-primary' : 'bg-danger' }}">{{ $item->status }}</span></td>
