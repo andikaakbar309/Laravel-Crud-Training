@@ -22,7 +22,7 @@
         </div>
     @endif
 
-    <table style="text-align:center;" class="table table-bordered table-stripped mb-3">
+    <table style="text-align:center;" class="table table-bordered table-stripped mb-3" id="tabelku">
         <thead>
             <tr>
                 <th>Seq</th>
@@ -34,30 +34,11 @@
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody>
-            @foreach ($data as $item)
-                <tr>
-                <td>{{ $item->seq }}</td>
-                <td>{{ $item->name }}</td>
-                <td>{{ $item->description }}</td>
-                <td>{{ $item->created_at }}</td>
-                <td>{{ $item->updated_at }}</td>
-                <td><span class="badge rounded-pill {{ $item->status == 'Active' ? 'bg-primary' : 'bg-danger' }}">{{ $item->status }}</span></td>
-                <td>
-                    <a href="{{ route('basic.edit', $item->id) }}" class="btn btn-success btn-sm">Edit</a>
-                    <form onsubmit="return confirm('Sure Inactive Data?')" class="d-inline" action="{{ route('basic.destroy', $item->id) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                    </form>
-                <a href="{{ url('/basic/'.$item->id) }}" class="btn btn-primary btn-sm">Detail</a>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
     </table>
 
-    {{ $data->links() }}
+    <script>
+        var itemDataUrl = "{{ route('basic.index') }}";
+    </script>
 
     <!-- End of Main Content -->
 @endsection
@@ -87,3 +68,27 @@
         </div>
     @endif
 @endpush
+
+
+
+        {{-- <tbody>
+            @foreach ($data as $item)
+                <tr>
+                <td>{{ $item->seq }}</td>
+                <td>{{ $item->name }}</td>
+                <td>{{ $item->description }}</td>
+                <td>{{ $item->created_at }}</td>
+                <td>{{ $item->updated_at }}</td>
+                <td><span class="badge rounded-pill {{ $item->status == 'Active' ? 'bg-primary' : 'bg-danger' }}">{{ $item->status }}</span></td>
+                <td>
+                    <a href="{{ route('basic.edit', $item->id) }}" class="btn btn-success btn-sm">Edit</a>
+                    <form onsubmit="return confirm('Sure Inactive Data?')" class="d-inline" action="{{ route('basic.destroy', $item->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                <a href="{{ url('/basic/'.$item->id) }}" class="btn btn-primary btn-sm">Detail</a>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody> --}}

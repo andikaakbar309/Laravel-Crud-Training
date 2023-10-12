@@ -23,7 +23,7 @@
                               <input type="text" class="form-control" name="seq" id="seq" placeholder="Sequence">
                               </div>
                               <div class="mb-3">
-                                    <a href="/categories" class="btn btn-secondary btn-sm">Back</a>
+                                    <a href="/basic" class="btn btn-secondary btn-sm">Back</a>
                                     <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                               </div>
                   </form>

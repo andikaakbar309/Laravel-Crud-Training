@@ -11,7 +11,9 @@ use Illuminate\Support\Facades\Hash;
 use App\Category;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\CategoryExport;
+use Yajra\DataTables\Facades\Datatables;
 use PDF;
+use function PHPUnit\Framework\MockObject\Builder\method;
 
 class BasicController extends Controller
 {
@@ -20,11 +22,27 @@ class BasicController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = Category::orderBy('seq', 'asc')->paginate(7);
+        if ($request->ajax()) {
+            $data = Category::select(['id', 'seq', 'name', 'description', 'created_at', 'updated_at', 'status']);
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function($row){
+                    $actionBtn = '<a href="' .route('basic.edit', ['basic' => $row->id]). '" class="edit btn btn-success btn-sm">Edit</a>';
+                    $showBtn = '<a href="' .route('basic.show', ['basic' => $row->id]). '" class="edit btn btn-primary btn-sm">Show</a>';
+                    $deleteForm = '<form action="'.route('basic.destroy', $row->id).'" method="POST" class="d-inline" >
+                        ' .csrf_field(). '
+                        ' .method_field('DELETE'). '
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>';
+                    return $actionBtn . $deleteForm . $showBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
 
-        return view('basic.index')->with('data', $data);
+        return view('basic.index');
     }
 
     public function exportPDF()
@@ -78,9 +96,10 @@ class BasicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(string $id)
     {
-        //
+        $data = Category::where('id', $id)->first();
+        return view('basic.show')->with('data', $data);
     }
 
     /**
