@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BasicController;
+use App\Http\Controllers\ApiRaja;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +31,9 @@ Route::get('/about', function () {
 Route::get('/blank', function () {
     return view('blank');
 })->name('blank');
+
+Route::get('api', [ApiRaja::class, 'index'])->name('api');
+Route::get('getCity/ajax/{id}', [ApiRaja::class, 'ajax']);
 
 Route::middleware('auth')->group(function() {
     Route::resource('basic', BasicController::class);
